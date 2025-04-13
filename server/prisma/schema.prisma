@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              Int  @default(autoincrement()) @unique
+  name            String 
+  email           String
+  password        String
+  image           String?
+  subscription    Subscription?
+  actions         Action[]
+}
+
+
+model Subscription  {
+  id          Int   @default(autoincrement()) @unique
+  published   DateTime?
+  type        SUBTYPE @default(BASIC)
+  subscriptionId String
+  userId      Int     @unique
+  user        User    @relation(references: [id],fields: [userId],onDelete:Cascade)
+}
+
+model Action { 
+  id            Int     @default(autoincrement()) @unique
+  userId        Int     @unique
+  user          User    @relation(references: [id],fields: [userId],onDelete: Cascade)
+  prompt        String  
+  inputImage    String[]
+  inputVideo    String
+  output        OutPut[]
+}
+
+model OutPut{
+  id            Int       @default(autoincrement())   @unique
+  outputText    String
+  outputImage   String[]
+  outputVideo   String?
+  mediaType     MEDIA_TYPE
+  actionId        Int       @unique
+  action          Action    @relation(references: [id], fields: [actionId],onDelete: Cascade)
+}
+
+enum SUBTYPE {
+  BASIC
+  PLATINUM
+  DAIMOND
+}
+
+enum  MEDIA_TYPE {
+  TEXT
+  IMAGE
+  VIDEO
+}
+
