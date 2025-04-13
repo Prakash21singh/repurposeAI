@@ -1,0 +1,40 @@
+-- DropForeignKey
+ALTER TABLE "Action" DROP CONSTRAINT "Action_userId_fkey";
+
+-- DropForeignKey
+ALTER TABLE "OutPut" DROP CONSTRAINT "OutPut_actionId_fkey";
+
+-- DropForeignKey
+ALTER TABLE "Subscription" DROP CONSTRAINT "Subscription_userId_fkey";
+
+-- AlterTable
+ALTER TABLE "Action" ALTER COLUMN "id" DROP DEFAULT,
+ALTER COLUMN "id" SET DATA TYPE TEXT,
+ALTER COLUMN "userId" SET DATA TYPE TEXT;
+DROP SEQUENCE "Action_id_seq";
+
+-- AlterTable
+ALTER TABLE "OutPut" ALTER COLUMN "id" DROP DEFAULT,
+ALTER COLUMN "id" SET DATA TYPE TEXT,
+ALTER COLUMN "actionId" SET DATA TYPE TEXT;
+DROP SEQUENCE "OutPut_id_seq";
+
+-- AlterTable
+ALTER TABLE "Subscription" ALTER COLUMN "id" DROP DEFAULT,
+ALTER COLUMN "id" SET DATA TYPE TEXT,
+ALTER COLUMN "userId" SET DATA TYPE TEXT;
+DROP SEQUENCE "Subscription_id_seq";
+
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "id" DROP DEFAULT,
+ALTER COLUMN "id" SET DATA TYPE TEXT;
+DROP SEQUENCE "User_id_seq";
+
+-- AddForeignKey
+ALTER TABLE "Subscription" ADD CONSTRAINT "Subscription_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Action" ADD CONSTRAINT "Action_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "OutPut" ADD CONSTRAINT "OutPut_actionId_fkey" FOREIGN KEY ("actionId") REFERENCES "Action"("id") ON DELETE CASCADE ON UPDATE CASCADE;

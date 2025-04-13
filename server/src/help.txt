@@ -1,0 +1,15 @@
+see how we can do that
+
+suppose we have an object 
+
+const userController = ()=>{
+    createUser:()=>{},
+    updateUser:()=>{},
+    deleteUser:()=>{},
+}
+
+
+const userRoute = (controllerName: name the controller that i have to use) => {
+    router.get("/", controllerName.getById)
+    router.put()
+}
