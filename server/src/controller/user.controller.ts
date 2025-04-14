@@ -11,12 +11,26 @@ export class UserController {
 
       const createdUser = await UserRepository.createUser({
         email: data.email,
-        name: data.name,
         password: data.password,
       });
 
       res.json(ResponseUtil.success(createdUser, "User created successfully!"));
     } catch (error) {
+      res.json(ResponseUtil.error("Something went wrong", 500));
+    }
+  }
+
+  static async Login_user(req: Request, res: Response) {
+    try {
+      const data = req.body;
+
+      const user = await UserRepository.verfiyUser({
+        email: data.email,
+        password: data.password,
+      });
+
+      res.json(ResponseUtil.success(user, "User verification successfully!"));
+    } catch (error: any) {
       res.json(ResponseUtil.error("Something went wrong", 500));
     }
   }

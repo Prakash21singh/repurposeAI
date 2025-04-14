@@ -1,16 +1,23 @@
 import { ICreateUser, IUpdateUser } from "../types";
 import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
-
-export async function createUser({ email, name, password }: ICreateUser) {
+import { prisma } from "../lib/prisma";
+export async function createUser({ email, password }: ICreateUser) {
   try {
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        email,
+      },
+    });
+
+    if (existingUser) throw new Error("User already exist with this email!");
+
     const salt = await bcrypt.genSalt(14);
     const hash = await bcrypt.hash(password, salt);
     const user = await prisma?.user.create({
       data: {
         id: uuid(),
         email,
-        name,
         password: hash,
         subscription: {
           create: {
@@ -31,6 +38,37 @@ export async function createUser({ email, name, password }: ICreateUser) {
   } catch (error: any) {
     console.log(error);
     throw new Error("Error creating user" + error.message);
+  }
+}
+
+export async function verfiyUser({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) {
+  try {
+    const user = await prisma.user.findFirst({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) throw new Error("User not found with this ID");
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordCorrect) throw new Error("Incorrect password. Try Again!");
+
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    };
+  } catch (error: any) {
+    console.error("Error:", error);
+    throw new Error(`Error while verifying the user` + error.message);
   }
 }
 

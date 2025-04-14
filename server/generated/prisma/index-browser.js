@@ -125,6 +125,18 @@ exports.Prisma.UserScalarFieldEnum = {
   image: 'image'
 };
 
+exports.Prisma.CreditScalarFieldEnum = {
+  id: 'id',
+  amount: 'amount',
+  userId: 'userId'
+};
+
+exports.Prisma.TransactionsScalarFieldEnum = {
+  id: 'id',
+  amount: 'amount',
+  userId: 'userId'
+};
+
 exports.Prisma.SubscriptionScalarFieldEnum = {
   id: 'id',
   published: 'published',
@@ -189,6 +201,8 @@ exports.PLATFORM = exports.$Enums.PLATFORM = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  Credit: 'Credit',
+  Transactions: 'Transactions',
   Subscription: 'Subscription',
   Action: 'Action',
   OutPut: 'OutPut'

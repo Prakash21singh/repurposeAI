@@ -15,13 +15,31 @@ datasource db {
 }
 
 model User {
-  id           String        @unique
-  name         String
+  id           String         @unique
+  name         String?
   email        String
   password     String
   image        String?
   subscription Subscription?
   actions      Action[]
+  credit       Credit?
+  transactions Transactions[]
+}
+
+model Credit {
+  id     String @unique
+  amount Int    @default(10)
+  userId String @unique
+  user   User   @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
+
+model Transactions {
+  id     String @unique
+  amount Int
+  userId String @unique
+  user   User   @relation(references: [id], fields: [userId], onDelete: Cascade)
+  // Right now this far i could think of
+  // Add more based on researchs
 }
 
 model Subscription {

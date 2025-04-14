@@ -6,7 +6,8 @@ const router = Router();
 
 // This is user route { coming at /api/user}
 router.get("/", UserController.Get_User_Info);
-router.post("/", UserController.Create_User);
+router.post("/login", UserController.Login_user);
+router.post("/register", UserController.Create_User);
 router.put("/:userId", UserController.Update_User);
 
 export default router;
