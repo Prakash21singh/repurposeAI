@@ -9,3 +9,16 @@ export interface ISidebarNav {
     }[];
   }[];
 }
+
+
+export interface IResponse<T> {
+  data: T;
+  message: string;
+  success: boolean;
+}
+
+export interface IUser {
+  id: string;
+  name?: string;
+  email: string;
+}
