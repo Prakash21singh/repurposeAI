@@ -1,11 +1,17 @@
 "use client";
 import CraftPost from "@/components/custom/CraftPost";
+import axios from "axios";
 import Image from "next/image";
-import React, { useState } from "react";
+import { useEffect } from "react";
 
 function Page() {
-  const [prompt, setPrompt] = useState<string>("");
-  const [image, setImage] = useState<File | null>();
+  async function getMe() {
+    const result = await axios.get("http://localhost:3000/api/me");
+    console.log(result.data);
+  }
+  useEffect(() => {
+    getMe();
+  }, []);
 
   return (
     <div className="w-full relative h-screen overflow-hidden flex flex-col  items-center justify-center">

@@ -1,7 +1,6 @@
 "use client";
 import { useRegister } from "@/hooks/use-auth";
-import AuthForm from "@components/components/auth/login-form";
-import Link from "next/link";
+import AuthForm from "@/components/components/auth/auth-form";
 
 type Props = {};
 
@@ -16,16 +15,18 @@ function Page({}: Props) {
     setLoading,
     setPassword,
     onSubmit,
+    name,
+    setName,
   } = useRegister();
 
   return (
     <div className="w-full h-screen flex items-center justify-center font-poppins relative overflow-hidden">
-      <div className="flex flex-col gap-y-3">
+      <div className="flex flex-col gap-y-3 w-full items-center p-3">
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold">
           Welcome to the Portal
         </h1>
-        <p className="text-xl dark:text-white/60">
-          We're happy to have you, please go on with the joining form.
+        <p className="text-xl dark:text-white/60 text-center">
+          We're happy to have you, Fill the register form.
         </p>
         <AuthForm
           error={error}
@@ -37,10 +38,10 @@ function Page({}: Props) {
           setEmail={setEmail}
           setLoading={setLoading}
           setPassword={setPassword}
+          formType="SIGNUP"
+          name={name}
+          setName={setName}
         />
-        <Link href={"/auth/login"} className="underline self-end">
-          Login
-        </Link>
       </div>
     </div>
   );

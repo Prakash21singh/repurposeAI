@@ -9,19 +9,23 @@ export const useRegister = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [name, setName] = useState("");
 
   async function onSubmit({
     email,
     password,
+    name,
   }: {
     email: string;
     password: string;
+    name?: string;
   }) {
     setLoading(true);
     try {
       const result = await axios.post("/api/auth/register", {
         email,
         password,
+        name,
       });
 
       if (result.data.success) {
@@ -46,6 +50,8 @@ export const useRegister = () => {
     setEmail,
     setPassword,
     onSubmit,
+    name,
+    setName,
   };
 };
 
