@@ -15,63 +15,70 @@ datasource db {
 }
 
 model User {
-  id              String   @unique
-  name            String?
-  email           String
-  password        String
-  image           String?
-  subscription    Subscription?
-  actions         Action[]
-  credit          Credit?
-  transactions    Transactions[]
+  id           String         @unique
+  name         String?
+  email        String
+  password     String
+  image        String?
+  subscription Subscription?
+  credit       Credit?
+  transactions Transactions[]
+}
+
+model Chat{
+  id String @unique @default(dbgenerated("uuid()"))
+  title String 
+  actions      Action[]
 }
 
 model Credit {
-  id          String  @unique
-  amount      Int     @default(10)
-  userId      String  @unique
-  user        User    @relation(references: [id],fields: [userId], onDelete: Cascade) 
+  id     String @unique
+  amount Int    @default(10)
+  userId String @unique
+  user   User   @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
 
 model Transactions {
-  id    String @unique
-  amount    Int    
-  userId    String    @unique
-  user      User      @relation(references: [id],fields: [userId],onDelete: Cascade)
+  id     String @unique
+  amount Int
+  userId String @unique
+  user   User   @relation(references: [id], fields: [userId], onDelete: Cascade)
   // Right now this far i could think of
   // Add more based on researchs
-
 }
 
-
-model Subscription  {
-  id          String    @unique
-  published   DateTime?   @default(now())
-  type        SUBTYPE @default(BASIC)
+model Subscription {
+  id             String    @unique
+  published      DateTime? @default(now())
+  type           SUBTYPE   @default(BASIC)
   subscriptionId String?
-  userId      String     @unique
-  user        User    @relation(references: [id],fields: [userId],onDelete:Cascade)
-}
-  
-model Action { 
-  id            String      @unique
-  userId        String     @unique
-  user          User    @relation(references: [id],fields: [userId],onDelete: Cascade)
-  prompt        String  
-  inputImage    String[]
-  inputVideo    String
-  output        OutPut[]
+  userId         String    @unique
+  user           User      @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
 
-model OutPut{
-  id                        String          @unique
-  outputText                String
-  outputImage               String[]
-  outputVideo               String?
-  mediaType                 MEDIA_TYPE
-  actionId                  String       @unique
-  action                    Action    @relation(references: [id], fields: [actionId],onDelete: Cascade)
-  recommendedPlatform       PLATFORM
+model Action {
+  id         String   @unique
+  chatId     String   @unique
+  chat       Chat     @relation(references: [id], fields: [chatId], onDelete: Cascade)
+  prompt     String
+  inputImage String[]
+  inputVideo String
+  output     OutPut[]
+  recommendedPlatform PLATFORM[]
+  aspectRatio         ASPECT_RATIO
+}
+
+
+
+model OutPut {
+  id                  String     @unique
+  outputText          String
+  outputImage         String[]
+  outputVideo         String?
+  mediaType           MEDIA_TYPE
+  actionId            String     @unique
+  action              Action     @relation(references: [id], fields: [actionId], onDelete: Cascade)
+  recommendedPlatform PLATFORM
 }
 
 enum SUBTYPE {
@@ -80,7 +87,7 @@ enum SUBTYPE {
   DAIMOND
 }
 
-enum  MEDIA_TYPE {
+enum MEDIA_TYPE {
   TEXT
   IMAGE
   VIDEO
@@ -94,4 +101,13 @@ enum PLATFORM {
   TWITTER
   PINTEREST
   MEDIUM
+}
+
+
+enum ASPECT_RATIO {
+  SQUARE
+  RECTANGLE
+  CIRCLE
+  PORTRAIT
+  LANDSCAPE
 }
