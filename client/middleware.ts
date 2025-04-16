@@ -14,8 +14,8 @@ export default withAuth(
       },
     },
     pages: {
-      signIn: "/auth/join",
-      newUser: "/auth/join",
+      signIn: "/auth/login",
+      newUser: "/auth/register",
     },
   }
 );

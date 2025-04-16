@@ -1,45 +1,23 @@
 "use client";
+import { useRegister } from "@/hooks/use-auth";
 import AuthForm from "@components/components/auth/login-form";
-import axios from "axios";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
 
 type Props = {};
 
 function Page({}: Props) {
-  const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-
-  async function onSubmit({
+  const {
     email,
+    error,
+    loading,
     password,
-  }: {
-    email: string;
-    password: string;
-  }) {
-    setLoading(true);
-    try {
-      const result = await axios.post("/api/auth/register", {
-        email,
-        password,
-      });
+    setEmail,
+    setError,
+    setLoading,
+    setPassword,
+    onSubmit,
+  } = useRegister();
 
-      if (result.data.success) {
-        router.push("/auth/login");
-      }
-    } catch (error: any) {
-      console.log(error);
-      setEmail("");
-      setPassword("");
-      setError(error.response.data.message);
-    } finally {
-      setLoading(false);
-    }
-  }
   return (
     <div className="w-full h-screen flex items-center justify-center font-poppins relative overflow-hidden">
       <div className="flex flex-col gap-y-3">
