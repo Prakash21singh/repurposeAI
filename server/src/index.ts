@@ -13,9 +13,7 @@ app.use(
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );
-app.use(
-  morgan(":method :url :status :res[content-length] - :response-time ms")
-);
+app.use(morgan("dev"));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb" }));
 
@@ -23,7 +21,8 @@ app.use("/api/user", userRoute);
 
 app.use((err: Error, _: any, res: Response, next: NextFunction) => {
   if (err) {
-    res.json(ResponseUtil.error(err.message, 500));
+    console.log(err);
+    res.json(ResponseUtil.error(err.message, 400));
   }
   next();
 });

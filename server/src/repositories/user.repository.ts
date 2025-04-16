@@ -2,7 +2,7 @@ import { ICreateUser, IUpdateUser } from "../types";
 import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
 import { prisma } from "../lib/prisma";
-export async function createUser({ email, password }: ICreateUser) {
+export async function createUser({ email, password, name }: ICreateUser) {
   try {
     const existingUser = await prisma.user.findFirst({
       where: {
@@ -18,6 +18,7 @@ export async function createUser({ email, password }: ICreateUser) {
       data: {
         id: uuid(),
         email,
+        name,
         password: hash,
         subscription: {
           create: {
@@ -38,6 +39,31 @@ export async function createUser({ email, password }: ICreateUser) {
   } catch (error: any) {
     console.log(error);
     throw new Error("Error creating user" + error.message);
+  }
+}
+
+export async function getMyProfile({ id }: { id: string }) {
+  try {
+    const user = await prisma.user.findFirst({
+      where: {
+        id,
+      },
+      select: {
+        id: true,
+        image: true,
+        name: true,
+        email: true,
+        subscription: true,
+        credit: true,
+      },
+    });
+
+    if (!user) throw new Error("Didn't get the user log please login again");
+
+    return user;
+  } catch (error: any) {
+    console.error("Error:", error);
+    throw new Error("Error finding the user's data");
   }
 }
 

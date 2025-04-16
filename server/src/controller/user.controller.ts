@@ -5,6 +5,20 @@ import * as UserRepository from "../repositories/user.repository";
 export class UserController {
   constructor() {}
 
+  static async Get_My_Profile(req: Request, res: Response) {
+    try {
+      const userId = (req as any).userId;
+
+      console.log(userId);
+
+      const user = await UserRepository.getMyProfile({ id: userId });
+
+      res.json(ResponseUtil.success(user, "Profile fetched successfully!"));
+    } catch (error) {
+      console.log(error);
+      res.json(ResponseUtil.error("Something went wrong", 500));
+    }
+  }
   static async Create_User(req: Request, res: Response) {
     try {
       const data = req.body;
@@ -12,6 +26,7 @@ export class UserController {
       const createdUser = await UserRepository.createUser({
         email: data.email,
         password: data.password,
+        name: data.name,
       });
 
       res.json(ResponseUtil.success(createdUser, "User created successfully!"));
