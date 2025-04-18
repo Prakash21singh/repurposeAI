@@ -14,15 +14,21 @@ export async function createUser({ email, password, name }: ICreateUser) {
 
     const salt = await bcrypt.genSalt(14);
     const hash = await bcrypt.hash(password, salt);
+    const createdId = uuid();
     const user = await prisma?.user.create({
       data: {
-        id: uuid(),
+        id: createdId,
         email,
         name,
         password: hash,
         subscription: {
           create: {
-            id: uuid(),
+            id: createdId,
+          },
+        },
+        credit: {
+          create: {
+            id: createdId,
           },
         },
       },
@@ -54,7 +60,12 @@ export async function getMyProfile({ id }: { id: string }) {
         name: true,
         email: true,
         subscription: true,
-        credit: true,
+        credit: {
+          select: {
+            amount: true,
+            id: true,
+          },
+        },
       },
     });
 
@@ -81,7 +92,7 @@ export async function verfiyUser({
       },
     });
 
-    if (!user) throw new Error("User not found with this ID");
+    if (!user) throw new Error("User not found with this email");
 
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
@@ -93,8 +104,7 @@ export async function verfiyUser({
       email: user.email,
     };
   } catch (error: any) {
-    console.error("Error:", error);
-    throw new Error(`Error while verifying the user` + error.message);
+    throw new Error(error);
   }
 }
 

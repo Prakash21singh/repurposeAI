@@ -1,14 +1,27 @@
 "use client";
 import CraftPost from "@/components/custom/CraftPost";
+import { updateUser } from "@/store/slices/user.slice";
 import axios from "axios";
 import Image from "next/image";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 function Page() {
+  const dispatch = useDispatch();
+
   async function getMe() {
     const result = await axios.get("http://localhost:3000/api/me");
-    console.log(result.data);
+    const data = result.data;
+    console.log(data);
+    if (data.success) {
+      dispatch(
+        updateUser({
+          ...data.user,
+        })
+      );
+    }
   }
+
   useEffect(() => {
     getMe();
   }, []);

@@ -29,11 +29,12 @@ export const authOption: NextAuthOptions = {
           if (result.data.success) {
             return result.data.data;
           }
+          console.log(result.data.message, "⭕⭕⭕");
           throw new Error(result.data.message || "Authentication failed");
         } catch (error: any) {
           console.error("Login error:", error);
           throw new Error(
-            error.response?.data?.message || "Authentication failed"
+            error.message || error.response?.data?.message || "Authentication failed"
           );
         }
       },

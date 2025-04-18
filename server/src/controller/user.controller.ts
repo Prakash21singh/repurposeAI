@@ -9,8 +9,6 @@ export class UserController {
     try {
       const userId = (req as any).userId;
 
-      console.log(userId);
-
       const user = await UserRepository.getMyProfile({ id: userId });
 
       res.json(ResponseUtil.success(user, "Profile fetched successfully!"));
@@ -46,7 +44,12 @@ export class UserController {
 
       res.json(ResponseUtil.success(user, "User verification successfully!"));
     } catch (error: any) {
-      res.json(ResponseUtil.error("Something went wrong", 500));
+      res.json(
+        ResponseUtil.error(
+          error.message || "Authentication failed! Try again",
+          400
+        )
+      );
     }
   }
 

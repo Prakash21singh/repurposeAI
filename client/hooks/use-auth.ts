@@ -70,17 +70,24 @@ export const useLogin = () => {
     password: string;
   }) {
     try {
+      setLoading(true);
+      setError("");
       const result = await signIn("credentials", {
         email,
         password,
         redirect: false,
       });
 
+      if (!result?.ok) {
+        setError(result?.error || "Authentication failed");
+      }
       if (result?.ok) {
         router.push("/dashboard");
       }
     } catch (error: any) {
       setError(error.message);
+    } finally{ 
+      setLoading(false)
     }
   }
 

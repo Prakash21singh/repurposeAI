@@ -33,10 +33,8 @@ type IProps = {
 };
 
 export default function AuthForm({
-  children,
   error,
   onSubmit,
-  setError,
   loading,
   email,
   setEmail,
@@ -46,7 +44,6 @@ export default function AuthForm({
   name,
   setName,
 }: IProps) {
-  console.log(loading);
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -101,7 +98,8 @@ export default function AuthForm({
                 )}
               </span>
             </div>
-            <Button type="submit" className="w-full">
+            {error ? <p className="text-red-500 text-xs">{error}</p> : ""}
+            <Button type="submit" className="w-full" disabled={loading}>
               {!loading ? `${formType}` : "Submitting..."}
             </Button>
             <div className="float-right">

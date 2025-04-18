@@ -4,8 +4,17 @@ interface IUserStateTypes {
   id: string | null;
   name: string | null;
   email: string | null;
-  subscription: "BASIC" | "PLATINUM" | "DAIMOND";
+  subscription: {
+    id: string;
+    published: string | Date;
+    type: "BASIC" | "PLATINUM" | "DAIMOND";
+    subscriptionId: string | null;
+  } | null;
   image: string | null;
+  credit: {
+    amount: number;
+    id: string;
+  } | null;
 }
 
 let initialState: IUserStateTypes = {
@@ -13,7 +22,8 @@ let initialState: IUserStateTypes = {
   email: null,
   image: null,
   name: null,
-  subscription: "BASIC",
+  subscription: null,
+  credit: null,
 };
 
 const userSlice = createSlice({
@@ -24,7 +34,7 @@ const userSlice = createSlice({
       state: IUserStateTypes,
       action: PayloadAction<IUserStateTypes>
     ) => {
-      state = {
+      return {
         ...state,
         ...action.payload,
       };

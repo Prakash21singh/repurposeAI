@@ -17,5 +17,17 @@ export async function GET() {
     },
   });
 
-  return NextResponse.json({ user: result.data.data });
+  if (!result.data.success) {
+    return NextResponse.json({
+      data: null,
+      success: false,
+      message: "Didn't get any data of user",
+    });
+  }
+
+  return NextResponse.json({
+    user: result.data.data,
+    success: true,
+    message: result.data.message,
+  });
 }

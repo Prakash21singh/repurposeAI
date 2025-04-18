@@ -9,17 +9,18 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
   SidebarRail,
 } from "@components/components/ui/sidebar";
 import { usePaths } from "@components/hooks/use-pathname";
 import { SIDEBAR_NAV } from "../../config";
 import Image from "next/image";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { route } = usePaths();
+  const user = useSelector((state: RootState) => state.user);
+
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -28,7 +29,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenuButton size="lg" asChild>
               <a href="/dashboard">
                 <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                  {/* <GalleryVerticalEnd className="size-4" /> */}
                   <Image
                     src={"/logo.svg"}
                     alt="RepurposeAI"
@@ -38,8 +38,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-medium">RepurposeAI</span>
-                  <span className="">v1.0.0</span>
+                  <span className="font-medium">Welcome</span>
+                  <span className="text-xs text-white/50">
+                    {user.name?.split(" ")[0] || user.email}
+                  </span>
                 </div>
               </a>
             </SidebarMenuButton>
@@ -49,30 +51,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
-            {SIDEBAR_NAV.navMain.map((item: any) => (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild>
-                  <a href={item.url} className="font-medium">
-                    {item.title}
-                  </a>
-                </SidebarMenuButton>
-                {item.items?.length ? (
-                  <SidebarMenuSub>
-                    {item.items.map((item: any) => (
-                      <SidebarMenuSubItem key={item.title}>
-                        <SidebarMenuSubButton
-                          asChild
-                          isActive={
-                            !!(item.title.toLowerCase() === route.toLowerCase())
-                          }>
-                          <a href={item.url}>{item.title}</a>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
-                    ))}
-                  </SidebarMenuSub>
-                ) : null}
-              </SidebarMenuItem>
-            ))}
+            {/* WIP: Show a list of all the things here */}
+            Here we'll show the actions
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
